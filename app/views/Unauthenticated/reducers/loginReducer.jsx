@@ -15,8 +15,8 @@
 
 import {
   REQUEST_LOGIN_ACTION,
-  REQUEST_LOGIN_SUCCESS,
-  REQUEST_LOGIN_FAILURE,
+  RECEIVE_LOGIN_SUCCESS,
+  RECEIVE_LOGIN_FAILURE,
 } from '../actions/loginActions';
 
 const initialState = {
@@ -32,12 +32,12 @@ export default (reduxState = initialState, action) => {
         ...reduxState,
         isFetching: true,
       };
-    case REQUEST_LOGIN_SUCCESS:
+    case RECEIVE_LOGIN_SUCCESS:
       return {
         ...reduxState,
         isFetching: false,
       };
-    case REQUEST_LOGIN_FAILURE:
+    case RECEIVE_LOGIN_FAILURE:
       return {
         ...reduxState,
         isFetching: false,

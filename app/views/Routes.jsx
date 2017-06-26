@@ -9,6 +9,8 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHashHistory from 'history/createHashHistory';
+import protectedHOC from './common/hoc/protected';
+import notProtectedHOC from './common/hoc/notProtected';
 
 import {
   Router,
@@ -47,11 +49,11 @@ export default class Routes extends Component {
           <Switch>
             <Route
               path="/customers"
-              component={CustomersContainer}
+              component={protectedHOC(CustomersContainer)}
             />
             <Route
               path="/"
-              component={UnauthenticatedContainer}
+              component={notProtectedHOC(UnauthenticatedContainer)}
             />
           </Switch>
         </ConnectedRouter>

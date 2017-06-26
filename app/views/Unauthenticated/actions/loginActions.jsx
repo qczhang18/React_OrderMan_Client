@@ -1,45 +1,89 @@
 /**
  * GENERAL NOTES
  * @author TalkRise <admin@talkrise.com>
- *
- * @description Redux actions. Contains sync action-creators and async actions using Redux-Thunk.
- *
  */
 
+
+// Custom imports
 import { history } from '../../Routes';
 import { post } from '../../../utilities/apiUtilities';
 
-export const REQUEST_LOGIN_ACTION = 'REQUEST_LOGIN_ACTION';
-export const REQUEST_LOGIN_SUCCESS = 'REQUEST_LOGIN_SUCCESS';
-export const REQUEST_LOGIN_FAILURE = 'REQUEST_LOGIN_FAILURE';
 
+export const REQUEST_LOGIN_ACTION = 'REQUEST_LOGIN_ACTION';
+export const RECEIVE_LOGIN_SUCCESS = 'RECEIVE_LOGIN_SUCCESS';
+export const RECEIVE_LOGIN_FAILURE = 'RECEIVE_LOGIN_FAILURE';
+export const CLEAR_AUTH_ACTION = 'CLEAR_AUTH_ACTION';
+
+
+/**
+ * @function requestLoginAction
+ * @description Action-creator
+ */
 const requestLoginAction = () => ({
-  type: REQUEST_LOGIN_SUCCESS,
+  type: REQUEST_LOGIN_ACTION,
 });
 
-const requestLoginSuccess = access_token => ({
-  type: REQUEST_LOGIN_SUCCESS,
+
+/**
+ * @function receiveLoginSuccess
+ * @description Action-creator
+ * @param access_token
+ */
+const receiveLoginSuccess = access_token => ({
+  type: RECEIVE_LOGIN_SUCCESS,
   payload: {
     access_token,
   },
 });
 
-const requestLoginFailure = error => ({
-  type: REQUEST_LOGIN_FAILURE,
+
+/**
+ * @function receiveLoginFailure
+ * @description Action-creator
+ * @param error
+ */
+const receiveLoginFailure = error => ({
+  type: RECEIVE_LOGIN_FAILURE,
   payload: {
     error,
   },
 });
 
-export const performLogin = (credentials) => {
-  return (dispatch) => {
+
+/**
+ * @function clearAuthAction
+ * @description Action-creator
+ */
+const clearAuthAction = () => ({
+  type: CLEAR_AUTH_ACTION,
+});
+
+
+/**
+ * @function performClearAuth
+ * @description Clears any access_token in the authReducer
+ */
+export const performClearAuth = () =>
+  (dispatch) => {
+    dispatch(clearAuthAction());
+  };
+
+
+/**
+ * @function performLogin
+ * @description POST to /users/authenticate to authenticate a User
+ * @param credentials
+ */
+export const performLogin = credentials =>
+  (dispatch) => {
     dispatch(requestLoginAction());
     post('/users/authenticate', credentials)
       .then((response) => {
-        console.log(response);
+        localStorage.setItem('access_token', response.auth.access_token);
+        dispatch(receiveLoginSuccess(response.auth.access_token));
+        history.push('/customers');
       })
-      .catch((error) => {
-        dispatch(requestLoginFailure(error));
+      .catch((e) => {
+        dispatch(receiveLoginFailure(e));
       });
   };
-};
