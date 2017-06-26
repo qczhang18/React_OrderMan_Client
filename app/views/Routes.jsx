@@ -6,48 +6,56 @@
 
 // Module imports
 import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
 import createHashHistory from 'history/createHashHistory';
 
 import {
-  Route,
   Router,
+  Route,
   Switch,
 } from 'react-router-dom';
 
 
-// Page imports
+// Component imports
 import CustomersContainer from './Customers/CustomersContainer';
 import UnauthenticatedContainer from './Unauthenticated/UnauthenticatedContainer';
 
 
-// Creating history
-export const history = createHashHistory();
+// Redux imports
+import store from '../store/configureStore';
 
+
+// Create and export history object for ConnectedRouter
+export const history = createHashHistory();
 
 /**
  * @class Routes
  * @description The client-side router for the app
  * @description Different components should be rendered depending on route.
  * These components we render are the "pages" of our app.
- * @description We're not using an "exact" match route, so any route starting with "/" will render
- * the UnauthenticatedContainer.
- *
+ * @description We're not using an "exact" match route, so
+ *   any route starting with "/customers" will render the CustomersContainer, protected by an HOC
+ *   any route starting with anything other than "/customers"
+ *     will rnder the UnauthenticatedContainer, protected by an HOC
  */
 export default class Routes extends Component {
   render() {
     return (
-      <Router history={history}>
-        <Switch>
-          <Route
-            path="/customers"
-            component={CustomersContainer}
-          />
-          <Route
-            path="/"
-            component={UnauthenticatedContainer}
-          />
-        </Switch>
-      </Router>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/customers"
+              component={CustomersContainer}
+            />
+            <Route
+              path="/"
+              component={UnauthenticatedContainer}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
     );
   }
 }

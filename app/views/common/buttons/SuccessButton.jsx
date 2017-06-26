@@ -41,7 +41,7 @@ export default class SuccessButton extends Component {
 SuccessButton.propTypes = {
   block: PropTypes.bool,
   disabled: PropTypes.bool,
-  loading: PropTypes.bool.isRequired,
+  // loading: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };
