@@ -37,7 +37,7 @@ export const performSignup = (credentials) => {
         alert('Signup successful! Now go to login!');
         history.push('/login');
       })
-      .cath((error) => {
+      .catch((error) => {
         dispatch(receiveSignupFailure(error));
       });
   };

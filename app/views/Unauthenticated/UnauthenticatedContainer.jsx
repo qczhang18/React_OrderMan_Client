@@ -14,9 +14,9 @@ import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import UnauthenticatedLayout from '../common/layouts/UnauthenticatedLayout';
 
-//Action imports
-import { performSignup } from './actions/SignupActions';
-
+// Action imports
+import { performSignup } from './actions/signupActions';
+import { performLogin } from './actions/loginActions';
 /**
  * @class UnauthenticatedContainer
  * @description Routing container for unauthenticated components
@@ -40,6 +40,8 @@ class UnauthenticatedContainer extends Component {
      */
     this.signup = (event) => {
       event.preventDefault();
+      const values = this.props.signupForm.values;
+      this.props.performSignup(values);
     };
 
 
@@ -49,6 +51,8 @@ class UnauthenticatedContainer extends Component {
      */
     this.login = (event) => {
       event.preventDefault();
+      const values = this.props.loginForm.values;
+      this.props.performLogin(values);
     };
   }
 
@@ -88,10 +92,14 @@ UnauthenticatedContainer.defaultProps = {};
 
 const mapStateToProps = state => ({
   signup: state.signup,
+  login: state.login,
+  signupForm: state.form.signupForm,
+  loginForm: state.form.loginForm,
 });
 
 const mapDispatchToProps = () => ({
   performSignup,
-})
+  performLogin,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps())(UnauthenticatedContainer);
